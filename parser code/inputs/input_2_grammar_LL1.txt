@@ -1,0 +1,8 @@
+ST -> struct N '{' CS '}'
+N -> id
+CS -> C CS'
+CS' -> ';' C CS' | ε
+C -> T id
+T -> TP | struct id | P
+TP -> 'int' | 'char' | 'bool' | 'float'
+P -> '*' id

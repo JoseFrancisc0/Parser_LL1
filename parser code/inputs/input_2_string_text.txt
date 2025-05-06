@@ -1,0 +1,1 @@
+struct alumno { int nota ; struct curso compis dificil ; * tabla nota }
