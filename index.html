@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading to Main Menu</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      height: auto;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    #loadingScreen, #mainMenu {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #loadingScreen {
+      background: url('./parser.png') no-repeat center center;
+      background-size: 100% 100%;
+      z-index: 2;
+    }
+
+    .progress-bar {
+      width: 60%;
+      height: 30px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 15px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      transition: width 6s linear;
+    }
+
+    #mainMenu, #grammarPage {
+      background: url('./parser2.jpg') repeat-y center top;
+      background-size: 100% auto;
+    }
+
+    #mainMenu {
+      flex-direction: column;
+      display: none; /* Hidden by default */
+      z-index: 1;
+    }
+
+    #mainMenu h1 {
+      font-size: 4em;
+      color: white;
+      text-shadow: 2px 2px 4px #000;
+      margin-bottom: 40px;
+    }
+
+    #mainMenu button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background: #2196F3;
+      color: white;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    }
+
+    #grammarPage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    #leftPanel {
+      width: 30%;
+      padding-right: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      color: white;
+    }
+
+    #leftPanel h2, #leftPanel h3 {
+      margin: 10px 0;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    #grammarInput {
+      width: 100%;
+      font-size: 1em;
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px solid #555;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    #stringInput {
+      width: 100%;
+      font-size: 1em;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      border: 2px solid #555;
+    }
+
+    #submitGrammar, #submitString {
+      font-size: 1em;
+      margin-bottom: 15px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4caf50;
+      color: white;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      cursor: pointer;
+      box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    }
+
+    #rightPanel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      color: white;
+    }
+
+    #firstFollowBox, #followBox {
+      display: flex;
+      justify-content: space-between; /* Position FIRST and FOLLOW side by side */
+      gap: 20px;
+    }
+
+    #firstFollowContent, #followContent {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+      width: 48%; /* Adjust the width to fit two boxes side by side */
+    }
+
+    #syntaxMatrixBox, #parsingTableBox, #errorTableBox {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    #parsingTableBox {
+      flex-grow: 1;
+    }
+
+    #firstFollowContent, #followContent, #syntaxMatrixContent, #parsingTableContent, #errorTableContent {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgAudio" loop autoplay>
+    <source src="./bangarang.mp3" type="audio/mp3">
+  </audio>
+
+  <div id="loadingScreen">
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div id="mainMenu">
+    <h1>LL(1) PARSER</h1>
+    <button>Parsear gramatica</button>
+  </div>
+
+  <div id="grammarPage" style="display: none;">
+    <div id="leftPanel">
+      <h2>Enter LL(1) Grammar</h2>
+      <textarea id="grammarInput" placeholder="S -> A B | C&#10;A -> a | ε"></textarea>
+      <br>
+      <button id="submitGrammar">Submit Grammar</button>
+  
+      <h3>Input String</h3>
+      <input type="text" id="stringInput" disabled>
+      <button id="submitString" disabled>Submit String</button>
+    </div>
+  
+    <div id="rightPanel">
+      <!-- FIRST and FOLLOW tables side by side -->
+      <div id="firstFollowBox">
+        <div id="firstFollowContent">
+          <h3>FIRST</h3>
+          <!-- FIRST table content will go here -->
+        </div>
+        <div id="followContent">
+          <h3>FOLLOW</h3>
+          <!-- FOLLOW table content will go here -->
+        </div>
+      </div>
+      
+      <!-- Syntax Matrix -->
+      <div id="syntaxMatrixBox">
+        <h3>Syntax Matrix</h3>
+        <div id="syntaxMatrixContent">
+          <!-- Syntax matrix content will go here -->
+        </div>
+      </div>
+      
+      <!-- Error Recovery Table -->
+      <div id="errorTableBox">
+        <h3>Error Recovery Table</h3>
+        <div id="errorTableContent">
+          <!-- Error recovery table content will go here -->
+        </div>
+      </div>
+      
+      <!-- String Parsing Table -->
+      <div id="parsingTableBox">
+        <h3>String Parsing Table</h3>
+        <div id="parsingTableContent">
+          <!-- This will be filled by the parse_string function -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const fill = document.getElementById('progressFill');
+      fill.style.width = '100%';
+
+      const audio = document.getElementById('bgAudio');
+      audio.volume = 1;
+      audio.play().catch((e) => {
+        console.warn("Autoplay failed, wait for interaction");
+      }) 
+
+      setTimeout(() => {
+        // Instantly hide loading screen and show main menu (janky transition)
+        document.getElementById('loadingScreen').style.display = 'none';
+        const menu = document.getElementById('mainMenu');
+        menu.style.display = 'flex';
+      }, 6000);
+
+      document.querySelector('#mainMenu button').addEventListener('click', () => {
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('grammarPage').style.display = 'flex';
+      });
+
+      /// SUBMIT GRAMMAR
+      document.getElementById('submitGrammar').addEventListener('click', () => {
+        const grammar = document.getElementById('grammarInput').value;
+
+        const lines = grammar.split('\n').map(line => line.trim());
+        console.log('Sending grammar: ', lines);
+
+        // Send the grammar to the backend for validation
+        fetch('http://127.0.0.1:5000/api/validate_grammar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ grammar: lines })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            console.error('Error:', data.error);
+          } else {
+            // Populate FIRST/FOLLOW tables and other UI elements
+            document.getElementById('firstFollowContent').innerHTML = `<pre>${data.first_table}</pre>`;
+            document.getElementById('followContent').innerHTML = `<pre>${data.follow_table}</pre>`;
+            document.getElementById('syntaxMatrixContent').innerHTML = `<pre>${data.parse_tablita}</pre>`;
+            document.getElementById('errorTableContent').innerHTML = `<pre>${data.error_tablita}</pre>`;
+
+            // Store the data for later parsing
+            window.grammarData = data;
+
+            const rulesProductions = {};
+            for (const [nonterminal, productions] of data.rules_productions) {
+              rulesProductions[nonterminal] = productions;
+            }
+
+            // Convert ordered parsing_table (list of [nonterminal, terminal, production]) to object
+            const parsingTable = {};
+            for (const [nonterminal, terminal, production] of data.parsing_table) {
+              if (!parsingTable[nonterminal]) parsingTable[nonterminal] = {};
+              parsingTable[nonterminal][terminal] = production;
+            }
+
+            // Now store processed grammarData with preserved order
+            window.grammarData = {
+              ...data,
+              rules_productions: rulesProductions,
+              parsing_table: parsingTable
+            };
+
+            // Enable the string input UI
+            document.getElementById('stringInput').disabled = false;
+            document.getElementById('submitString').disabled = false;
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      });
+
+      /// SUBMIT STRING
+      document.getElementById('submitString').addEventListener('click', () => {
+        const inputString = document.getElementById('stringInput').value;
+
+        console.log(inputString);
+
+        if (!inputString) {
+          alert('ENTER A STRING');
+          return;
+        }
+
+        // Send the input string and grammar data to the backend for parsing
+        fetch('http://127.0.0.1:5000/api/parse_string', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            terminals: window.grammarData.terminals,
+            parsing_table: window.grammarData.parsing_table,
+            rules_productions: window.grammarData.rules_productions,
+            input_str: inputString
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            console.error('Error:', data.error);
+          } else {
+            // Display the parsed results
+            document.getElementById('parsingTableContent').innerHTML = `<pre>${data.parsing_str_table}</pre>`;
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    };
+  </script>
+</body>
+</html>
