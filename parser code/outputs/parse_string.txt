@@ -1,0 +1,27 @@
++------------------+------------------------------------+-------------------------+
+|      Stack       |            Input String            |          Action         |
++------------------+------------------------------------+-------------------------+
+|       $ P        | = num + + num ( ; ) print ( id ) $ |  Explore: skip input =  |
+|       $ P        |  num + + num ( ; ) print ( id ) $  | Explore: skip input num |
+|       $ P        |    + + num ( ; ) print ( id ) $    |  Explore: skip input +  |
+|       $ P        |     + num ( ; ) print ( id ) $     |  Explore: skip input +  |
+|       $ P        |      num ( ; ) print ( id ) $      | Explore: skip input num |
+|       $ P        |        ( ; ) print ( id ) $        |  Explore: skip input (  |
+|       $ P        |         ; ) print ( id ) $         |  Explore: skip input ;  |
+|       $ P        |          ) print ( id ) $          |  Explore: skip input )  |
+|       $ P        |           print ( id ) $           |       Apply P -> L      |
+|       $ L        |           print ( id ) $           |     Apply L -> S L'     |
+|      $ L' S      |           print ( id ) $           |  Apply S -> print ( E ) |
+| $ L' ) E ( print |           print ( id ) $           |       Match print       |
+|    $ L' ) E (    |              ( id ) $              |         Match (         |
+|     $ L' ) E     |               id ) $               |     Apply E -> T E'     |
+|   $ L' ) E' T    |               id ) $               |     Apply T -> F T'     |
+|  $ L' ) E' T' F  |               id ) $               |      Apply F -> id      |
+| $ L' ) E' T' id  |               id ) $               |         Match id        |
+|   $ L' ) E' T'   |                ) $                 |      Apply T' -> ε      |
+|    $ L' ) E'     |                ) $                 |      Apply E' -> ε      |
+|      $ L' )      |                ) $                 |         Match )         |
+|       $ L'       |                 $                  |      Apply L' -> ε      |
+|        $         |                 $                  |         Match $         |
+|                  |                                    |          Accept         |
++------------------+------------------------------------+-------------------------+

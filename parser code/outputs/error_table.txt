@@ -1,0 +1,13 @@
++----+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|    |    $    |    (    |    )    |    *    |    +    |    -    |    /    |    ;    |    =    |    id   |   num   |  print  |
++----+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+| P  | extract | explore | explore | explore | explore | explore | explore | explore | explore |    -    | explore |    -    |
+| L  | extract | explore | explore | explore | explore | explore | explore | explore | explore |    -    | explore |    -    |
+| L' |    -    | explore | explore | explore | explore | explore | explore |    -    | explore | explore | explore | explore |
+| S  | extract | explore | explore | explore | explore | explore | explore | extract | explore |    -    | explore |    -    |
+| E  | extract |    -    | extract | explore | explore | explore | explore | extract | explore |    -    |    -    | explore |
+| E' |    -    | explore |    -    | explore |    -    |    -    | explore |    -    | explore | explore | explore | explore |
+| T  | extract |    -    | extract | explore | extract | extract | explore | extract | explore |    -    |    -    | explore |
+| T' |    -    | explore |    -    |    -    |    -    |    -    |    -    |    -    | explore | explore | explore | explore |
+| F  | extract |    -    | extract | extract | extract | extract | extract | extract | explore |    -    |    -    | explore |
++----+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
